@@ -28,32 +28,27 @@
      mkdir <project_folder>
      cd <project_folder>
      ```
-2. **Initialize Node.js**:
-   - In your project folder, initialize Node.js:
-     ```bash
-     npm init -y
-     ```
 
-3. **Clone the Repository from GitHub**:
+2. **Clone the Repository from GitHub**:
    - Now, clone the repository into your project folder:
      ```bash
      git clone https://github.com/Bhargavmupparisetty/Trackable-pages.git
      ```
 
-4. **change repo**:
+3. **change repo**:
    - Change the repository to the Trackable-pages:
      ```bash
      cd Trackable-pages
      npm install
      ```
 
-5. **Run the Application**:
+4. **Run the Application**:
    - Start the application by running:
      ```bash
      node index.js
      ```
    
-6. **Access the Application**:
+5. **Access the Application**:
    - Open your browser and navigate to `http://localhost:3000` to use the tool.
 
 ## Usage
