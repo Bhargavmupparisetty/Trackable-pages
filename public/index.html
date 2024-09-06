@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Tracker</title>
+</head>
+<body>
+    <h1>URL Tracker</h1>
+    <form id="generateForm">
+        <input type="url" id="target_url" name="target_url" placeholder="Enter the target URL" required>
+        <button type="submit">Generate Tracking URL</button>
+    </form>
+    <p id="result"></p>
+    <script>
+        document.getElementById('generateForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const targetUrl = document.getElementById('target_url').value;
+            fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ target_url: targetUrl })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').textContent = 'Tracking URL: ' + data.trackingUrl;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
