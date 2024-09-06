@@ -44,6 +44,7 @@
    - Change the repository to the Trackable-pages:
      ```bash
      cd Trackable-pages
+     npm install
      ```
 
 5. **Run the Application**:
