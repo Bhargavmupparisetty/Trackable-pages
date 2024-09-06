@@ -40,10 +40,10 @@
      git clone https://github.com/Bhargavmupparisetty/Trackable-pages.git
      ```
 
-4. **Install Dependencies**:
-   - Install the required dependencies:
+4. **change repo**:
+   - Change the repository to the Trackable-pages:
      ```bash
-     npm install
+     cd Trackable-pages
      ```
 
 5. **Run the Application**:
