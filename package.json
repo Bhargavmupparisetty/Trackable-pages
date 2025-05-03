@@ -13,6 +13,7 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-useragent": "^1.0.15",
+    "geoip-lite": "^1.4.10",
     "ipinfo": "^1.5.1",
     "path": "^0.12.7",
     "uuid": "^10.0.0"
