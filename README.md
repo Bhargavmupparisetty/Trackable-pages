@@ -62,5 +62,4 @@ This tool should be used responsibly and within legal boundaries. Ensure that al
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
-You can find the tool at [Trackable pages tool](https://trackable-pages.onrender.com)
 
