@@ -9,6 +9,8 @@
 3. When the recipient opens the link:
    - They are redirected to the legitimate website.
    - Meanwhile, details like their location, device information, and IP address are sent to the server for logging and analysis.
+The working of the Tracker is shown in the mechanism given below:
+![Working mechanism](images\working.png)
 
 ## Key Features
 - **Real-time Tracking**: Captures location, device information, and IP address as soon as the link is accessed.
@@ -20,6 +22,8 @@
 - **HTML**: For the front-end structure and UI elements.
 - **JavaScript**: To handle link generation and tracking processes.
 - **Node.js**: For backend handling, including the tracking mechanism and server-side operations.
+The User Interface of the application is very easy to navigate and looks like the image given below:
+![User Interface](images\UI.png)
 
 ## Setup Instructions
 1. **Create a New Project**:
@@ -45,7 +49,7 @@
 4. **Run the Application**:
    - Start the application by running:
      ```bash
-     node index.js
+     node server.js
      ```
    
 5. **Access the Application**:
@@ -54,12 +58,23 @@
 ## Usage
 1. Input the URL of a legitimate website you want to track.
 2. Share the generated URL with the intended person.
-3. Track their location, IP, and device details from your server logs.
+3. Track their location, IP, and device details from your server logs or they can also be displayed on the main page.
 
 ## Legal Considerations
 This tool should be used responsibly and within legal boundaries. Ensure that all usage complies with data protection and privacy laws in your jurisdiction. Misuse of this tool can lead to legal consequences.
 
+## Live Demo
+
+You can try the live version of this tool hosted on Render:
+
+ [Live Tracker on Render](https://trackable-pages.onrender.com)
+
+
+
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
+## Author
+Bhargav Mupparisetty
 
 
