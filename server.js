@@ -135,37 +135,41 @@ app.post('/location', async (req, res) => {
     const tracking = trackingData.get(pageID);
 
     if (tracking) {
-        // Add IP address from request
         const clickData = {
             ...deviceInfo,
-            ip: req.ip || req.connection.remoteAddress || req.socket.remoteAddress,
+            ip: req.headers['x-forwarded-for'] || req.ip || req.connection?.remoteAddress || req.socket?.remoteAddress,
             timestamp: new Date()
         };
-
-        tracking.clicks.push(clickData);
-        console.log(`Tracking details for page ${pageID}:`, tracking.clicks);
 
         // Convert latitude and longitude to address if available
         if (deviceInfo.latitude && deviceInfo.longitude) {
             try {
                 const url = `https://nominatim.openstreetmap.org/reverse?lat=${deviceInfo.latitude}&lon=${deviceInfo.longitude}&format=json`;
-                const response = await fetch(url);
+
+                const response = await fetch(url, {
+                    headers: {
+                        'User-Agent': 'TrackerApp/1.0 (ai4humankind@gmail.com)' //If you are cloning this repo, please use your own email id here.
+                    }
+                });
+
                 const data = await response.json();
-                
-                if (data && data.address) {
-                    const address = data.display_name;
-                    console.log('Address:', address);
-                    // Store address in the click data
-                    clickData.address = address;
+
+                if (data && data.display_name) {
+                    clickData.address = data.display_name;
+                    console.log('Address:', clickData.address);
                 }
             } catch (error) {
                 console.error('Error getting address:', error);
             }
         }
+
+        tracking.clicks.push(clickData);
+        console.log(`Tracking details for page ${pageID}:`, tracking.clicks);
     }
 
     res.status(200).json({ success: true });
 });
+
 
 // GET route to retrieve tracking data
 app.get('/get-tracking/:pageID', (req, res) => {
