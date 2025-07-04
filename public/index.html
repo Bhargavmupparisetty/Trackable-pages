@@ -3,1103 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Tracker Pro</title>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chart.js for analytics graphs -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>URL Tracker</title>
     <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
-            --accent-color: #e74c3c;
-            --dark-color: #2c3e50;
-            --light-color: #ecf0f1;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f5f7fa;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             color: #333;
-            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+
+        h1 {
+            margin-bottom: 20px;
+            color: #007BFF;
+        }
+
+        form {
+            background: #fff;
             padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
         }
-        
-        header {
-            background-color: white;
-            box-shadow: var(--shadow);
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo i {
-            margin-right: 10px;
-        }
-        
-        main {
-            padding: 40px 0;
-        }
-        
-        .card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            padding: 25px;
-            margin-bottom: 30px;
-            transition: var(--transition);
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .card-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--dark-color);
-        }
-        
-        /* Form styles */
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .input-group {
-            display: flex;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            overflow: hidden;
-            transition: var(--transition);
-        }
-        
-        .input-group:focus-within {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        }
-        
-        .input-icon {
-            display: flex;
-            align-items: center;
-            padding: 0 15px;
-            background-color: #f9f9f9;
-            color: #555;
-        }
-        
+
         input[type="url"] {
-            flex-grow: 1;
-            padding: 12px 15px;
-            border: none;
-            font-size: 16px;
-            outline: none;
-        }
-        
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-        
-        button:hover {
-            background-color: #2980b9;
-        }
-        
-        button i {
-            margin-right: 8px;
-        }
-        
-        /* Result area styles */
-        .result-area {
-            display: none;
-        }
-        
-        .tracking-url {
-            display: flex;
-            align-items: center;
-            background-color: #f0f7ff;
-            padding: 15px;
-            border-radius: 6px;
-            border-left: 4px solid var(--primary-color);
-            margin-bottom: 20px;
-        }
-        
-        .tracking-url input {
-            flex-grow: 1;
+            width: 80%;
             padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-right: 10px;
-            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 16px;
         }
-        
-        .copy-btn {
-            background-color: var(--dark-color);
-            padding: 8px 15px;
-            border-radius: 4px;
-        }
-        
-        .copy-btn:hover {
-            background-color: #1a2530;
-        }
-        
-        /* Tabs */
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 20px;
-        }
-        
-        .tab {
-            padding: 12px 20px;
+
+        button {
+            width: 50%;
+            padding: 10px;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
             cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: var(--transition);
-            font-weight: 500;
         }
-        
-        .tab.active {
-            border-bottom: 2px solid var(--primary-color);
-            color: var(--primary-color);
+
+        button:hover {
+            background-color: #41fd0d;
         }
-        
-        .tab-content {
+
+        #result {
+            margin-top: 20px;
+            font-size: 16px;
+            padding: 10px;
+            background-color: #e7f3ff;
+            border: 1px solid #007BFF;
+            border-radius: 5px;
+            width: 50%;
+            box-sizing: border-box;
+            align-self: center;
             display: none;
         }
-        
-        .tab-content.active {
-            display: block;
+
+        #result a {
+            color: #007BFF;
+            text-decoration: none;
         }
-        
-        /* Stats cards */
-        .stats-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 30px;
+
+        #result a:hover {
+            text-decoration: underline;
         }
-        
-        .stat-card {
-            flex: 1;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            padding: 20px;
-            min-width: 200px;
-            transition: var(--transition);
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .stat-header {
+
+        .copy-container {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
-            color: #777;
-            font-size: 0.9rem;
-        }
-        
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            background-color: #e6f3ff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-            color: var(--primary-color);
-        }
-        
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--dark-color);
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 0.85rem;
-            color: #777;
-        }
-        
-        /* Charts */
-        .chart-container {
-            height: 300px;
-            margin-bottom: 30px;
-        }
-        
-        /* Table styles */
-        .table-container {
-            overflow-x: auto;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-        
-        th {
-            background-color: #f9f9f9;
-            font-weight: 500;
-            color: #555;
-        }
-        
-        tr:hover {
-            background-color: #f5f7fa;
-        }
-        
-        /* Loading indicator */
-        .loading {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        
-        .spinner {
-            width: 24px;
-            height: 24px;
-            border: 3px solid rgba(0, 0, 0, 0.1);
-            border-radius: 50%;
-            border-top-color: var(--primary-color);
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* All tracking links section */
-        .all-links-container {
-            margin-top: 40px;
-        }
-        
-        .link-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            transition: var(--transition);
-        }
-        
-        .link-card:hover {
-            background-color: #f9f9f9;
-        }
-        
-        .link-details {
-            flex-grow: 1;
-        }
-        
-        .link-url {
-            font-weight: 500;
-            color: var(--dark-color);
-            margin-bottom: 5px;
-        }
-        
-        .link-meta {
-            font-size: 0.85rem;
-            color: #777;
-            display: flex;
-            gap: 15px;
-        }
-        
-        .link-actions {
-            display: flex;
             gap: 10px;
+            margin-top: 10px;
         }
-        
-        .action-btn {
+
+        .copy-button {
+            width: auto;
             padding: 8px 12px;
-            font-size: 0.9rem;
+            background-color: #28a745;
+            font-size: 14px;
+            border-radius: 3px;
         }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
+
+        .copy-button:hover {
+            background-color: #218838;
         }
-        
-        .btn-secondary {
-            background-color: var(--secondary-color);
+
+        .copy-button.copied {
+            background-color: #6c757d;
         }
-        
-        /* Badge */
-        .badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-        
-        .badge-primary {
-            background-color: #e6f3ff;
-            color: var(--primary-color);
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .stats-row {
-                flex-direction: column;
-            }
-            
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .tab {
-                padding: 10px 15px;
-                font-size: 0.9rem;
-            }
+
+        .url-display {
+            word-break: break-all;
+            flex: 1;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container header-content">
-            <div class="logo">
-                <i class="fas fa-link"></i> URL Tracker Pro
-            </div>
-        </div>
-    </header>
+    <h1>URL Tracker</h1>
+    <form id="generateForm">
+        <input type="url" id="target_url" name="target_url" placeholder="Enter the target URL" required>
+        <button type="submit">Generate</button>
+    </form>
     
-    <main>
-        <div class="container">
-            <!-- URL Generation Form -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Create Tracking URL</h2>
-                </div>
-                <form id="generateForm">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-icon">
-                                <i class="fas fa-globe"></i>
-                            </div>
-                            <input type="url" id="target_url" name="target_url" placeholder="Enter the target URL (e.g., https://example.com)" required>
-                        </div>
-                    </div>
-                    <button type="submit">
-                        <i class="fas fa-magic"></i> Generate Tracking URL
-                    </button>
-                </form>
-                
-                <div id="loading" class="loading">
-                    <div class="spinner"></div>
-                    <span>Generating tracking URL...</span>
-                </div>
-            </div>
-            
-            <!-- Result Area (hidden initially) -->
-            <div id="result-area" class="card result-area">
-                <div class="card-header">
-                    <h2 class="card-title">Tracking Details</h2>
-                    <div>
-                        <span id="tracking-id" class="badge badge-primary"></span>
-                    </div>
-                </div>
-                
-                <div class="tracking-url">
-                    <input type="text" id="tracking-url" readonly>
-                    <button id="copy-btn" class="copy-btn">
-                        <i class="fas fa-copy"></i> Copy
-                    </button>
-                </div>
-                
-                <div class="tabs">
-                    <div class="tab active" data-tab="overview">Overview</div>
-                    <div class="tab" data-tab="devices">Devices</div>
-                    <div class="tab" data-tab="browsers">Browsers</div>
-                    <div class="tab" data-tab="raw-data">Raw Data</div>
-                </div>
-                
-                <!-- Overview Tab -->
-                <div id="overview" class="tab-content active">
-                    <div class="stats-row">
-                        <div class="stat-card">
-                            <div class="stat-header">
-                                <div class="stat-icon">
-                                    <i class="fas fa-mouse-pointer"></i>
-                                </div>
-                                <div>Total Clicks</div>
-                            </div>
-                            <div class="stat-value" id="total-clicks">0</div>
-                            <div class="stat-label">All time</div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-header">
-                                <div class="stat-icon">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                                <div>Last Click</div>
-                            </div>
-                            <div class="stat-value" id="last-click">-</div>
-                            <div class="stat-label">Time since last click</div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-header">
-                                <div class="stat-icon">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </div>
-                                <div>Created</div>
-                            </div>
-                            <div class="stat-value" id="created-at">-</div>
-                            <div class="stat-label">Date created</div>
-                        </div>
-                    </div>
-                    
-                    <div id="target-url-display" class="tracking-url">
-                        <i class="fas fa-external-link-alt"></i>
-                        <span id="target-url"></span>
-                    </div>
-                </div>
-                
-                <!-- Devices Tab -->
-                <div id="devices" class="tab-content">
-                    <div class="chart-container">
-                        <canvas id="devices-chart"></canvas>
-                    </div>
-                    
-                    <div class="stats-row">
-                        <div class="stat-card">
-                            <div class="stat-header">
-                                <div class="stat-icon">
-                                    <i class="fas fa-mobile-alt"></i>
-                                </div>
-                                <div>Mobile</div>
-                            </div>
-                            <div class="stat-value" id="mobile-count">0</div>
-                            <div class="stat-label">Mobile visits</div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-header">
-                                <div class="stat-icon">
-                                    <i class="fas fa-desktop"></i>
-                                </div>
-                                <div>Desktop</div>
-                            </div>
-                            <div class="stat-value" id="desktop-count">0</div>
-                            <div class="stat-label">Desktop visits</div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-header">
-                                <div class="stat-icon">
-                                    <i class="fas fa-robot"></i>
-                                </div>
-                                <div>Bots</div>
-                            </div>
-                            <div class="stat-value" id="bot-count">0</div>
-                            <div class="stat-label">Bot visits</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Browsers Tab -->
-                <div id="browsers" class="tab-content">
-                    <div class="chart-container">
-                        <canvas id="browsers-chart"></canvas>
-                    </div>
-                    
-                    <div id="platforms-container" class="stats-row">
-                        <!-- Dynamically populated with platform stats -->
-                    </div>
-                </div>
-                
-                <!-- Raw Data Tab -->
-                <div id="raw-data" class="tab-content">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Browser</th>
-                                    <th>Platform</th>
-                                    <th>Device</th>
-                                    <th>IP Address</th>
-                                    <th>Referrer</th>
-                                </tr>
-                            </thead>
-                            <tbody id="clicks-table">
-                                <!-- Dynamically populated with click data -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- All Tracking Links -->
-            <div class="card all-links-container">
-                <div class="card-header">
-                    <h2 class="card-title">All Tracking Links</h2>
-                    <button id="refresh-links">
-                        <i class="fas fa-sync"></i> Refresh
-                    </button>
-                </div>
-                
-                <div id="all-links">
-                    <!-- Dynamically populated with all tracking links -->
-                </div>
-            </div>
+    <div id="result">
+        <div class="url-display">
+            Tracking URL: <a href="" target="_blank" id="trackingLink"></a>
         </div>
-    </main>
+        <div class="copy-container">
+            <button class="copy-button" id="copyButton" onclick="copyTrackingUrl()">Copy Link</button>
+        </div>
+    </div>
+    <br><br><br>
+    <p id="resultdata"></p>
     
     <script>
-        // DOM elements
-        const generateForm = document.getElementById('generateForm');
-        const loadingIndicator = document.getElementById('loading');
-        const resultArea = document.getElementById('result-area');
-        const trackingUrlInput = document.getElementById('tracking-url');
-        const copyBtn = document.getElementById('copy-btn');
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const refreshLinksBtn = document.getElementById('refresh-links');
-        
-        // Charts
-        let devicesChart = null;
-        let browsersChart = null;
-        
-        // Current tracking ID
-        let currentTrackingId = null;
-        
-        // Initialize tabs
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Remove active class from all tabs and tab contents
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
-                
-                // Add active class to clicked tab and corresponding content
-                tab.classList.add('active');
-                const tabName = tab.getAttribute('data-tab');
-                document.getElementById(tabName).classList.add('active');
-            });
-        });
-        
-        // URL generation form submission
-        generateForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            
-            const targetUrl = document.getElementById('target_url').value;
-            
-            // Show loading indicator
-            loadingIndicator.style.display = 'flex';
-            
-            try {
-                const response = await fetch('/generate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ target_url: targetUrl })
-                });
-                
-                const data = await response.json();
-                
-                // Store the tracking ID and fetch tracking data
-                currentTrackingId = data.trackingId;
-                document.getElementById('tracking-id').textContent = `ID: ${currentTrackingId}`;
-                
-                // Set the tracking URL in the input field
-                trackingUrlInput.value = data.trackingUrl;
-                
-                // Fetch and display tracking data
-                await fetchTrackingData(currentTrackingId);
-                
-                // Show the result area
-                resultArea.style.display = 'block';
-                
-                // Hide loading indicator
-                loadingIndicator.style.display = 'none';
-                
-                // Set up auto-refresh for the data
-                setInterval(() => {
-                    if (currentTrackingId) {
-                        fetchTrackingData(currentTrackingId, false);
-                    }
-                }, 10000); // Refresh every 10 seconds
-                
-                // Load all tracking links
-                loadAllTrackingLinks();
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error generating tracking URL. Please try again.');
-                loadingIndicator.style.display = 'none';
-            }
-        });
-            
-            // Copy tracking URL to clipboard
-    copyBtn.addEventListener('click', () => {
-        trackingUrlInput.select();
-        document.execCommand('copy');
-        
-        // Show copied message
-        copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied';
-        copyBtn.style.backgroundColor = '#2ecc71'; // This is the --secondary-color value
-        
-        // Reset button after 2 seconds
-        setTimeout(() => {
-            copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
-            copyBtn.style.backgroundColor = '';
-        }, 2000);
-    });
+        let currentTrackingUrl = '';
 
-        
-        // Refresh all links
-        refreshLinksBtn.addEventListener('click', () => {
-            loadAllTrackingLinks();
-        });
-        
-        // Fetch tracking data from server
-        async function fetchTrackingData(trackingId, showLoading = true) {
-            if (showLoading) {
-                loadingIndicator.style.display = 'flex';
-            }
-            
-            try {
-                const response = await fetch(`/tracking-data/${trackingId}`);
-                const data = await response.json();
+        document.getElementById('generateForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const targetUrl = document.getElementById('target_url').value;
+            fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ target_url: targetUrl })
+            })
+            .then(response => response.json())
+            .then(data => {
+                currentTrackingUrl = data.trackingUrl;
+                const trackingLink = document.getElementById('trackingLink');
+                trackingLink.href = currentTrackingUrl;
+                trackingLink.textContent = currentTrackingUrl;
                 
-                // Update overview stats
-                document.getElementById('total-clicks').textContent = data.totalClicks;
-                document.getElementById('target-url').textContent = data.targetUrl;
+                const resultElement = document.getElementById('result');
+                resultElement.style.display = 'block';
                 
-                // Format dates
-                const createdDate = new Date(data.createdAt);
-                document.getElementById('created-at').textContent = formatDate(createdDate);
-                
-                if (data.lastClickAt) {
-                    const lastClickDate = new Date(data.lastClickAt);
-                    document.getElementById('last-click').textContent = timeAgo(lastClickDate);
-                } else {
-                    document.getElementById('last-click').textContent = 'No clicks yet';
-                }
-                
-                // Update device stats
-                document.getElementById('mobile-count').textContent = data.deviceStats.mobile || 0;
-                document.getElementById('desktop-count').textContent = data.deviceStats.desktop || 0;
-                document.getElementById('bot-count').textContent = data.deviceStats.bot || 0;
-                
-                // Create charts
-                createDevicesChart(data.deviceStats);
-                createBrowsersChart(data.browserStats);
-                
-                // Generate platform stats cards
-                const platformsContainer = document.getElementById('platforms-container');
-                platformsContainer.innerHTML = '';
-                
-                for (const [platform, count] of Object.entries(data.platformStats)) {
-                    platformsContainer.innerHTML += `
-                        <div class="stat-card">
-                            <div class="stat-header">
-                                <div class="stat-icon">
-                                    <i class="fas ${getPlatformIcon(platform)}"></i>
-                                </div>
-                                <div>${platform || 'Unknown'}</div>
-                            </div>
-                            <div class="stat-value">${count}</div>
-                            <div class="stat-label">Users</div>
-                        </div>
-                    `;
-                }
-                
-                // Populate raw data table
-                const clicksTable = document.getElementById('clicks-table');
-                clicksTable.innerHTML = '';
-                
-                if (data.clickDetails && data.clickDetails.length > 0) {
-                    data.clickDetails.forEach(click => {
-                        const row = document.createElement('tr');
-                        
-                        // Determine device type icon
-                        let deviceType = 'Unknown';
-                        let deviceIcon = 'question';
-                        
-                        if (click.isMobile) {
-                            deviceType = 'Mobile';
-                            deviceIcon = 'mobile-alt';
-                        } else if (click.isDesktop) {
-                            deviceType = 'Desktop';
-                            deviceIcon = 'desktop';
-                        } else if (click.isBot) {
-                            deviceType = 'Bot';
-                            deviceIcon = 'robot';
-                        }
-                        
-                        row.innerHTML = `
-                            <td>${formatDate(new Date(click.timestamp))}</td>
-                            <td>${click.browser || 'Unknown'} ${click.version || ''}</td>
-                            <td>${click.platform || 'Unknown'}</td>
-                            <td><i class="fas fa-${deviceIcon}"></i> ${deviceType}</td>
-                            <td>${click.ip || 'Unknown'}</td>
-                            <td>${click.referer || 'Direct'}</td>
-                        `;
-                        
-                        clicksTable.appendChild(row);
-                    });
-                } else {
-                    // No clicks yet
-                    clicksTable.innerHTML = `
-                        <tr>
-                            <td colspan="6" style="text-align: center; padding: 30px;">
-                                <i class="fas fa-mouse-pointer" style="font-size: 24px; color: #ddd; margin-bottom: 10px;"></i>
-                                <p>No clicks recorded yet</p>
-                            </td>
-                        </tr>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error fetching tracking data:', error);
-            } finally {
-                if (showLoading) {
-                    loadingIndicator.style.display = 'none';
-                }
-            }
-        }
-        
-        // Load all tracking links
-        async function loadAllTrackingLinks() {
-            try {
-                const response = await fetch('/all-tracking-ids');
-                const data = await response.json();
-                
-                const allLinksContainer = document.getElementById('all-links');
-                allLinksContainer.innerHTML = '';
-                
-                if (data.length > 0) {
-                    data.forEach(link => {
-                        const createdDate = new Date(link.createdAt);
-                        
-                        const linkCard = document.createElement('div');
-                        linkCard.className = 'link-card';
-                        linkCard.innerHTML = `
-                            <div class="link-details">
-                                <div class="link-url">${link.targetUrl}</div>
-                                <div class="link-meta">
-                                    <span><i class="fas fa-mouse-pointer"></i> ${link.clickCount} clicks</span>
-                                    <span><i class="fas fa-calendar-alt"></i> Created ${formatDate(createdDate)}</span>
-                                    <span><i class="fas fa-tag"></i> ID: ${link.id}</span>
-                                </div>
-                            </div>
-                            <div class="link-actions">
-                                <button class="action-btn btn-primary view-stats-btn" data-id="${link.id}">
-                                    <i class="fas fa-chart-line"></i> View Stats
-                                </button>
-                            </div>
-                        `;
-                        
-                        allLinksContainer.appendChild(linkCard);
-                        
-                        // Add click event to the view stats button
-                        linkCard.querySelector('.view-stats-btn').addEventListener('click', () => {
-                            currentTrackingId = link.id;
-                            document.getElementById('tracking-id').textContent = `ID: ${link.id}`;
-                            fetchTrackingData(link.id);
-                            resultArea.style.display = 'block';
-                            window.scrollTo({ top: resultArea.offsetTop - 20, behavior: 'smooth' });
-                        });
-                    });
-                } else {
-                    allLinksContainer.innerHTML = `
-                        <div style="text-align: center; padding: 30px;">
-                            <i class="fas fa-link" style="font-size: 24px; color: #ddd; margin-bottom: 10px;"></i>
-                            <p>No tracking links created yet</p>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error loading tracking links:', error);
-            }
-        }
-        
-        // Create devices chart
-        function createDevicesChart(deviceStats) {
-            const ctx = document.getElementById('devices-chart').getContext('2d');
-            
-            // Destroy previous chart if it exists
-            if (devicesChart) {
-                devicesChart.destroy();
-            }
-            
-            // Prepare data
-            const labels = [];
-            const data = [];
-            const backgroundColors = [
-                'rgba(52, 152, 219, 0.7)',
-                'rgba(46, 204, 113, 0.7)',
-                'rgba(231, 76, 60, 0.7)',
-                'rgba(155, 89, 182, 0.7)'
-            ];
-            
-            let i = 0;
-            for (const [type, count] of Object.entries(deviceStats)) {
-                if (count > 0) {
-                    labels.push(capitalizeFirstLetter(type));
-                    data.push(count);
-                    i++;
-                }
-            }
-            
-            // Create chart
-            devicesChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: backgroundColors.slice(0, labels.length),
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Device Types',
-                            font: {
-                                size: 16
-                            }
-                        }
-                    }
-                }
+                // Reset copy button state
+                const copyButton = document.getElementById('copyButton');
+                copyButton.textContent = 'Copy Link';
+                copyButton.classList.remove('copied');
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
+        });
+
+        function copyTrackingUrl() {
+            if (currentTrackingUrl) {
+                navigator.clipboard.writeText(currentTrackingUrl).then(function() {
+                    const copyButton = document.getElementById('copyButton');
+                    copyButton.textContent = 'Copied!';
+                    copyButton.classList.add('copied');
+                    
+                    // Reset button after 2 seconds
+                    setTimeout(function() {
+                        copyButton.textContent = 'Copy Link';
+                        copyButton.classList.remove('copied');
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy: ', err);
+                    // Fallback for older browsers
+                    fallbackCopyTextToClipboard(currentTrackingUrl);
+                });
+            }
         }
-        
-        // Create browsers chart
-                // Create browsers chart
-                function createBrowsersChart(browserStats) {
-                    const ctx = document.getElementById('browsers-chart').getContext('2d');
-                    
-                    // Destroy previous chart if it exists
-                    if (browsersChart) {
-                        browsersChart.destroy();
-                    }
-                    
-                    // Prepare data
-                    const labels = [];
-                    const data = [];
-                    const backgroundColors = [
-                        'rgba(52, 152, 219, 0.7)',
-                        'rgba(46, 204, 113, 0.7)',
-                        'rgba(231, 76, 60, 0.7)',
-                        'rgba(155, 89, 182, 0.7)',
-                        'rgba(241, 196, 15, 0.7)',
-                        'rgba(243, 156, 18, 0.7)'
-                    ];
-                    
-                    let i = 0;
-                    for (const [browser, count] of Object.entries(browserStats)) {
-                        if (count > 0) {
-                            labels.push(browser || 'Unknown');
-                            data.push(count);
-                            i++;
-                        }
-                    }
-                    
-                    // Create chart
-                    browsersChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Visitors',
-                                data: data,
-                                backgroundColor: backgroundColors.slice(0, labels.length),
-                                borderWidth: 0,
-                                borderRadius: 4
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    display: false
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Browser Distribution',
-                                    font: {
-                                        size: 16
-                                    }
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    ticks: {
-                                        precision: 0
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }
-                
-                // Helper function to get platform icon
-                function getPlatformIcon(platform) {
-                    platform = (platform || '').toLowerCase();
-                    
-                    if (platform.includes('win')) return 'fa-windows';
-                    if (platform.includes('mac') || platform.includes('apple')) return 'fa-apple';
-                    if (platform.includes('android')) return 'fa-android';
-                    if (platform.includes('ios') || platform.includes('iphone') || platform.includes('ipad')) return 'fa-apple';
-                    if (platform.includes('linux')) return 'fa-linux';
-                    if (platform.includes('ubuntu')) return 'fa-ubuntu';
-                    if (platform.includes('chrome')) return 'fa-chrome';
-                    
-                    return 'fa-globe'; // Default icon
-                }
-                
-                // Format date for display
-                function formatDate(date) {
-                    if (!date || isNaN(date)) return 'Unknown';
-                    
-                    const options = { 
-                        year: 'numeric', 
-                        month: 'short', 
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    };
-                    
-                    return date.toLocaleDateString(undefined, options);
-                }
-                
-                // Calculate time ago
-                function timeAgo(date) {
-                    if (!date || isNaN(date)) return 'Unknown';
-                    
-                    const seconds = Math.floor((new Date() - date) / 1000);
-                    
-                    let interval = Math.floor(seconds / 31536000);
-                    if (interval >= 1) {
-                        return interval === 1 ? '1 year ago' : `${interval} years ago`;
-                    }
-                    
-                    interval = Math.floor(seconds / 2592000);
-                    if (interval >= 1) {
-                        return interval === 1 ? '1 month ago' : `${interval} months ago`;
-                    }
-                    
-                    interval = Math.floor(seconds / 86400);
-                    if (interval >= 1) {
-                        return interval === 1 ? '1 day ago' : `${interval} days ago`;
-                    }
-                    
-                    interval = Math.floor(seconds / 3600);
-                    if (interval >= 1) {
-                        return interval === 1 ? '1 hour ago' : `${interval} hours ago`;
-                    }
-                    
-                    interval = Math.floor(seconds / 60);
-                    if (interval >= 1) {
-                        return interval === 1 ? '1 minute ago' : `${interval} minutes ago`;
-                    }
-                    
-                    if (seconds < 10) return 'just now';
-                    
-                    return `${Math.floor(seconds)} seconds ago`;
-                }
-                
-                // Capitalize first letter of a string
-                function capitalizeFirstLetter(string) {
-                    if (!string) return 'Unknown';
-                    return string.charAt(0).toUpperCase() + string.slice(1);
-                }
-                
-                // Initialize the app
-                function initApp() {
-                    // Load all tracking links on page load
-                    loadAllTrackingLinks();
-                    
-                    // Fix for copy button styling issue
-                    copyBtn.addEventListener('click', () => {
-                        trackingUrlInput.select();
-                        document.execCommand('copy');
-                        
-                        // Show copied message
-                        copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied';
-                        copyBtn.style.backgroundColor = '#2ecc71';
-                        
-                        // Reset button after 2 seconds
-                        setTimeout(() => {
-                            copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
-                            copyBtn.style.backgroundColor = '';
-                        }, 2000);
-                    });
-                }
-                
-                // Call init function when page loads
-                window.addEventListener('DOMContentLoaded', initApp);
-            </script>
-        </body>
-        </html>
-        
+
+        // Fallback copy function for older browsers
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                const copyButton = document.getElementById('copyButton');
+                copyButton.textContent = 'Copied!';
+                copyButton.classList.add('copied');
+                setTimeout(function() {
+                    copyButton.textContent = 'Copy Link';
+                    copyButton.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Fallback: Unable to copy', err);
+            }
+            document.body.removeChild(textArea);
+        }
+    </script>
+</body>
+</html>
