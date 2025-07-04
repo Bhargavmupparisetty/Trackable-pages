@@ -10,7 +10,8 @@
    - They are redirected to the legitimate website.
    - Meanwhile, details like their location, device information, and IP address are sent to the server for logging and analysis.
 The working of the Tracker is shown in the mechanism given below:
-![Working mechanism](images\working.png)
+
+![Working mechanism](images/working.png)
 
 ## Key Features
 - **Real-time Tracking**: Captures location, device information, and IP address as soon as the link is accessed.
@@ -23,7 +24,8 @@ The working of the Tracker is shown in the mechanism given below:
 - **JavaScript**: To handle link generation and tracking processes.
 - **Node.js**: For backend handling, including the tracking mechanism and server-side operations.
 The User Interface of the application is very easy to navigate and looks like the image given below:
-![User Interface](images\UI.png)
+
+![User Interface](images/UI.png)
 
 ## Setup Instructions
 1. **Create a New Project**:
